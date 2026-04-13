@@ -30,8 +30,9 @@ services:
         sync: false
 
   # ── 2. FRONTEND (Vite/React) ─────────────────────────────────────────────
-  - type: static_site
+  - type: web               # Keep this as 'web'
     name: chargeback-frontend
+    runtime: static        # This tells Render it is a Static Site
     buildCommand: |
       cd frontend
       npm install
