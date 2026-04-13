@@ -1,18 +1,24 @@
+# backend/requirements.txt
+# ── CORE BACKEND FRAMEWORK ──
+fastapi==0.110.0
+# The pinned version that resolves the build error on Render
+pydantic==2.6.3
+uvicorn==0.27.1
 
-fastapi>=0.100.0
-pydantic>=2.0.0
-uvicorn>=0.20.0
-sqlalchemy[asyncio]==2.0.36
-asyncpg==0.30.0
-alembic==1.14.0
-pydantic-settings==2.7.0
-pydantic[email]==2.10.3
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
-python-multipart==0.0.20
-anthropic==0.40.0
-httpx==0.28.1
-pytesseract==0.3.13
-Pillow==11.0.0
-stripe==11.4.0
+# ── DATABASE & ORM ──
+sqlalchemy==2.0.27
+# Python driver for PostgreSQL (Render uses this)
+psycopg2-binary==2.9.9
+
+# ── CONFIG & SECRETS ──
+pydantic-settings==2.2.1
 python-dotenv==1.0.1
+# Required for JWT (authentication)
+python-multipart==0.0.9
+
+# ── AI/LLM SERVICE ──
+anthropic==0.21.3
+
+# ── UTILITIES ──
+# Required by FastAPI for some HTTP exception handling
+starlette==0.36.3
