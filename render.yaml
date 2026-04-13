@@ -1,4 +1,3 @@
-# render.yaml
 version: "1"
 
 services:
@@ -8,9 +7,9 @@ services:
     runtime: python
     region: oregon
     plan: starter
-    # Simplified build command to rely on Render's optimization
     buildCommand: |
       cd backend
+      python -m pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: |
       cd backend
