@@ -1,12 +1,18 @@
 # ── 2. FRONTEND (Vite/React — Static Site) ───────────────────────────────
-  - type: web
+  - type: static_site
     name: chargeback-frontend
-    runtime: static
-    # region: oregon      <-- Already removed (good)
-    # plan: free          <-- REMOVE THIS LINE ENTIRELY
     buildCommand: |
       cd frontend
       npm install
       npm run build
     staticPublishPath: ./frontend/dist
     autoDeploy: true
+
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    envVars:
+      - key: VITE_API_URL
+        value: https://chargeback-api.onrender.com/api
