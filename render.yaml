@@ -1,7 +1,3 @@
-# render.yaml — ChargebackDefender Blueprint
-# Deploy everything with: render blueprint sync
-# Docs: https://render.com/docs/blueprint-spec
-
 version: "1"
 
 services:
@@ -11,7 +7,7 @@ services:
     name: chargeback-api
     runtime: python
     region: oregon
-    plan: starter          # $7/mo — upgrade to standard for production
+    plan: starter
     buildCommand: |
       cd backend
       pip install -r requirements.txt
@@ -24,47 +20,25 @@ services:
     envVars:
       - key: APP_NAME
         value: ChargebackDefender
-
-      - key: DEBUG
-        value: "false"
-
-      # Injected automatically by Render when linked to the DB below
       - key: DATABASE_URL
         fromDatabase:
           name: chargeback-db
           property: connectionString
-
-      # Set these manually in Render Dashboard → Environment
       - key: JWT_SECRET_KEY
-        generateValue: true          # Render auto-generates a secure value
-
+        generateValue: true
       - key: ANTHROPIC_API_KEY
-        sync: false                  # Set manually in dashboard
-
+        sync: false
       - key: NASIO_WEBHOOK_SECRET
         sync: false
-
-      - key: NASIO_COMMUNITY_SLUG
-        value: ecommerce-defender-room
-
       - key: STRIPE_SECRET_KEY
         sync: false
-
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
-
-      - key: GOOGLE_VISION_KEY
-        sync: false
-
-      - key: USE_GOOGLE_VISION
-        value: "false"
 
   # ── 2. FRONTEND (Vite/React — Static Site) ───────────────────────────────
   - type: web
     name: chargeback-frontend
     runtime: static
-    region: oregon
-    plan: free              # Static sites are free on Render
+    # region: oregon  <-- REMOVED: Static sites don't use regions
+    plan: free
     buildCommand: |
       cd frontend
       npm install
@@ -73,29 +47,19 @@ services:
     autoDeploy: true
 
     routes:
-      # SPA fallback — all routes serve index.html
       - type: rewrite
         source: /*
         destination: /index.html
 
-    headers:
-      - path: /*
-        name: X-Frame-Options
-        value: DENY
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-
     envVars:
       - key: VITE_API_URL
-        # Point to your backend URL after first deploy
+        # This will point to your backend service name within Render
         value: https://chargeback-api.onrender.com/api
 
-  # ── 3. DATABASE (Managed PostgreSQL) ─────────────────────────────────────
+# ── 3. DATABASE (Managed PostgreSQL) ─────────────────────────────────────
 databases:
   - name: chargeback-db
     databaseName: chargebackdb
     user: chargebackuser
     region: oregon
-    plan: free              # 256MB — upgrade to starter ($7/mo) for production
-    ipAllowList: []         # Allow all (internal access only via Render network)
+    plan: free
