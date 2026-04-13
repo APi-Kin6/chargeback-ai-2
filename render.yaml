@@ -1,5 +1,6 @@
 version: "1"
 services:
+  # ── BACKEND ──
   - type: web
     name: chargeback-api
     runtime: python
@@ -11,6 +12,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.10.0
 
+  # ── FRONTEND ──
   - type: static_site
     name: chargeback-frontend
     buildCommand: "cd frontend && npm install && npm run build"
